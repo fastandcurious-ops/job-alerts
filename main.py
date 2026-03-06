@@ -151,11 +151,11 @@ def send_telegram_alert(company, title, url, location, time_posted, day_posted, 
     
     # The Notification Body
     body = (
-        f"**Company:** {company}\n"
-        f"**Role:** {title}\n"
-        f"**Location:** {location}\n"
-        f"**Time posted:** {time_posted}\n"
-        f"**Day Posted:** {day_posted}\n"
+        f"**🏢Company:** {company}\n"
+        f"**💼Role:** {title}\n"
+        f"**🌏Location:** {location}\n"
+        f"**🕑Time posted:** {time_posted}\n"
+        f"**📅Day Posted:** {day_posted}\n"
         f"**Job Id:** {job_id}\n"
         f"**YOE:** {yoe}\n\n"
         f"**Link:** [Apply Here]({url})"
