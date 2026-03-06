@@ -9,10 +9,62 @@ TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 STATE_FILE = "seen_jobs.json"
 
+SWE_KEYWORDS = [
+    "software engineer", "sde", "developer", "programmer", 
+    "backend", "frontend", "fullstack", "full stack", 
+    "member of technical staff", "mts", "technology analyst", 
+    "tech analyst", "technical associate", "associate", 
+    "c++", "node", "react", "javascript", "typescript", "python", 
+    "software", "software developer", "swe", "software development engineer",
+    "technical"
+]
+
+def is_india(location_str):
+    """Ensures the job is located in an Indian tech hub."""
+    if not location_str:
+        return False
+    loc = location_str.lower()
+    indian_hubs = [
+        "india", "ind", "blr", "bengaluru", "bangalore", 
+        "delhi", "ncr", "new delhi", "gurgaon", "gurugram", "noida", 
+        "mumbai", "bombay", "hyderabad", "pune", "chennai", "madras", 
+        "kolkata", "ahmedabad", "remote - in", "remote-in", "del", "blr",
+        "mum", "hyd", "pune", "chen", "kolk", "ahmd", 
+        "remote (india)", "remote (in)", "remote india", "remote"
+    ]
+    return any(hub in loc for hub in indian_hubs)
+
 TARGETS = [
-    {"name": "Stripe", "ats": "greenhouse", "id": "stripe", "keywords": ["software engineer", "sde"]},
-    {"name": "Figma", "ats": "greenhouse", "id": "figma", "keywords": ["software engineer", "sde"]},
-    {"name": "Amazon", "ats": "amazon", "country": "IND", "keywords": ["software engineer", "sde"]}
+    # Custom API
+    {"name": "Amazon", "ats": "amazon", "country": "IND", "keywords": SWE_KEYWORDS},
+    
+    # Greenhouse Configurations
+    {"name": "Stripe", "ats": "greenhouse", "id": "stripe", "keywords": SWE_KEYWORDS},
+    {"name": "Checkout.com", "ats": "greenhouse", "id": "checkoutcom", "keywords": SWE_KEYWORDS},
+    {"name": "CRED", "ats": "greenhouse", "id": "cred", "keywords": SWE_KEYWORDS},
+    {"name": "Groww", "ats": "greenhouse", "id": "groww", "keywords": SWE_KEYWORDS},
+    {"name": "PhonePe", "ats": "greenhouse", "id": "phonepe", "keywords": SWE_KEYWORDS},
+    {"name": "Razorpay", "ats": "greenhouse", "id": "razorpaysoftwareprivatelimited", "keywords": SWE_KEYWORDS},
+    {"name": "Rippling", "ats": "greenhouse", "id": "rippling", "keywords": SWE_KEYWORDS},
+    {"name": "Slice", "ats": "greenhouse", "id": "slice", "keywords": SWE_KEYWORDS},
+    {"name": "Upstox", "ats": "greenhouse", "id": "upstox", "keywords": SWE_KEYWORDS},
+    {"name": "Brex", "ats": "greenhouse", "id": "brex", "keywords": SWE_KEYWORDS},
+    {"name": "Grab", "ats": "greenhouse", "id": "grab", "keywords": SWE_KEYWORDS},
+    {"name": "GoTo", "ats": "greenhouse", "id": "gojek", "keywords": SWE_KEYWORDS},
+    {"name": "MobiKwik", "ats": "greenhouse", "id": "mobikwik", "keywords": SWE_KEYWORDS},
+    {"name": "Pine Labs", "ats": "greenhouse", "id": "pinelabs", "keywords": SWE_KEYWORDS},
+    {"name": "Wise", "ats": "greenhouse", "id": "wise", "keywords": SWE_KEYWORDS},
+    {"name": "Chargebee", "ats": "greenhouse", "id": "chargebee", "keywords": SWE_KEYWORDS},
+    {"name": "Yubi", "ats": "greenhouse", "id": "credavenue", "keywords": SWE_KEYWORDS},
+    {"name": "LendingKart", "ats": "greenhouse", "id": "lendingkart", "keywords": SWE_KEYWORDS},
+    
+    # Lever Configurations
+    {"name": "Revolut", "ats": "lever", "id": "revolut", "keywords": SWE_KEYWORDS},
+    {"name": "Paytm", "ats": "lever", "id": "paytm", "keywords": SWE_KEYWORDS}, 
+    {"name": "Perfios", "ats": "lever", "id": "perfios", "keywords": SWE_KEYWORDS},
+    {"name": "PolicyBazaar", "ats": "lever", "id": "policybazaar", "keywords": SWE_KEYWORDS},
+    {"name": "BizNext", "ats": "lever", "id": "biznext", "keywords": SWE_KEYWORDS},
+    {"name": "Jumbotail", "ats": "lever", "id": "jumbotail", "keywords": SWE_KEYWORDS},
 ]
 
 # --- HELPER FUNCTIONS ---
@@ -86,33 +138,6 @@ def format_time_ist(raw_time):
     else:
         time_formatted = dt_ist.strftime("%I:%M:%S %p %d %b CUR")
         
-    return time_formatted, day_formatted
-    """Parses various API time formats and converts to IST."""
-    dt = datetime.now(timezone.utc) 
-    
-    try:
-        if ats_type == "greenhouse" and raw_time:
-            dt = datetime.fromisoformat(raw_time.replace('Z', '+00:00'))
-        elif ats_type == "lever" and raw_time:
-            dt = datetime.fromtimestamp(raw_time / 1000.0, tz=timezone.utc)
-        elif ats_type == "amazon" and raw_time:
-            dt = datetime.strptime(raw_time, "%B %d, %Y").replace(tzinfo=timezone.utc)
-    except Exception:
-        pass 
-
-    # Convert to IST (UTC + 5:30)
-    ist_offset = timedelta(hours=5, minutes=30)
-    tz_ist = timezone(ist_offset)
-    dt_ist = dt.astimezone(tz_ist)
-    
-    # Target format: 10:30:05 AM 06 Mar
-    time_formatted = dt_ist.strftime("%I:%M:%S %p %d %b")
-    # Extract just the day name for the "Day Posted" field (e.g., "Friday")
-    day_formatted = dt_ist.strftime("%A") 
-    
-    if ats_type == "amazon":
-        return f"Date Only ({dt_ist.strftime('%d %b')})", day_formatted
-    
     return time_formatted, day_formatted
 
 # --- NOTIFICATION ENGINE ---
@@ -233,7 +258,8 @@ def main():
 
         for job in current_jobs:
             if job["id"] not in state[company_name]:
-                if is_relevant(job["title"], target.get("keywords", [])):
+                # Now checking BOTH the title and the geographic location
+                if is_relevant(job["title"], target.get("keywords", [])) and is_india(job["location"]):
                     
                     time_posted, day_posted = format_time_ist(job["raw_time"])
                     yoe = estimate_yoe(job["title"])
