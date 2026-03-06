@@ -2,20 +2,21 @@ name: Job Scraper Cron
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # Runs every 15 minutes
-  workflow_dispatch: # Allows you to run it manually from the GitHub UI
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # This explicitly grants the runner push access
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main # CRITICAL: Forces runner to attach to the main branch, not a detached HEAD
+          fetch-depth: 0 # CRITICAL: Pulls the full commit history to prevent push conflicts
 
       - name: Set up Python
         uses: actions/setup-python@v5
