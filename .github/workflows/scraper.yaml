@@ -32,10 +32,7 @@ jobs:
         run: python main.py
 
       - name: Commit and push state
-        run: |
-          git config --global user.name "GitHub Action Bot"
-          git config --global user.email "action@github.com"
-          git add seen_jobs.json
-          # Only commit if the file actually changed to avoid empty commit errors
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update job state"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update job state"
+          file_pattern: "seen_jobs.json"
