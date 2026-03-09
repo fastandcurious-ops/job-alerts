@@ -4,6 +4,8 @@ import os
 import time
 from datetime import datetime, timezone, timedelta
 from playwright.sync_api import sync_playwright
+import re
+from urllib.parse import urlparse
 
 # --- CONFIGURATION ---
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -319,54 +321,78 @@ def scrape_amazon(target):
 
 
 def scrape_workday(target):
-    """Uses a headless browser to render Workday's JS and extract job links."""
+    """Uses Playwright to render Workday JS and surgically extract rich job data."""
     jobs = []
-
+    
+    # FIX 1: Safely extract just the domain (e.g., https://walmart.wd5.myworkdayjobs.com)
+    parsed_uri = urlparse(target["url"])
+    domain = f"{parsed_uri.scheme}://{parsed_uri.netloc}"
+    
     with sync_playwright() as p:
-        # Launch Chromium invisibly
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-
+        
         try:
-            # Navigate to the Workday career page
             page.goto(target["url"], wait_until="networkidle", timeout=30000)
-
-            # Allow an extra second for internal React components to fully paint
-            time.sleep(2)
-
-            # Find all anchor <a> tags on the page
-            elements = page.query_selector_all("a")
-
-            for el in elements:
-                href = el.get_attribute("href")
-
-                # Workday job URLs almost always contain '/job/'
+            
+            # Wait for Workday's job list container to actually load into the DOM
+            page.wait_for_selector('a[data-automation-id="jobTitle"]', timeout=15000)
+            
+            # FIX 2: Target the specific job "cards" (list items containing a job title)
+            cards = page.locator('li').filter(has=page.locator('a[data-automation-id="jobTitle"]')).all()
+            
+            for card in cards:
+                # 1. Title & URL
+                title_elem = card.locator('a[data-automation-id="jobTitle"]')
+                title = title_elem.inner_text().strip()
+                href = title_elem.get_attribute("href")
+                
                 if href and "/job/" in href:
-                    title = el.inner_text().strip()
-                    if title:
-                        # Construct the full URL
-                        base_url = target["url"].split("/en-US")[0]
-                        full_url = base_url + href if href.startswith("/") else href
+                    # Safely construct the final URL without duplicating paths
+                    full_url = domain + href if href.startswith("/") else href
+                    
+                    # 2. Job ID (Grabbing the clean ID from the URL path)
+                    job_id = href.split("/")[-1]
+                    
+                    # 3. Location (Using Workday's hidden automation tags)
+                    loc_elem = card.locator('[data-automation-id="locations"]')
+                    location = loc_elem.inner_text().strip() if loc_elem.count() > 0 else "Remote/Unspecified"
+                    
+                    # 4. Date Posted Parsing ("Posted 5 Days Ago" -> Actual Date)
+                    time_elem = card.locator('[data-automation-id="postedOn"]')
+                    raw_posted_text = time_elem.inner_text().strip() if time_elem.count() > 0 else ""
+                    
+                    calculated_date = ""
+                    if raw_posted_text:
+                        raw_posted_text = raw_posted_text.lower()
+                        days_to_subtract = 0
+                        if "today" in raw_posted_text:
+                            days_to_subtract = 0
+                        elif "yesterday" in raw_posted_text:
+                            days_to_subtract = 1
+                        else:
+                            # Extract the number from "Posted 5 Days Ago"
+                            match = re.search(r'(\d+)', raw_posted_text)
+                            if match:
+                                days_to_subtract = int(match.group(1))
+                        
+                        # Calculate the actual UTC date to pass to our IST formatter
+                        dt_posted = datetime.now(timezone.utc) - timedelta(days=days_to_subtract)
+                        calculated_date = dt_posted.strftime("%Y-%m-%d")
 
-                        # Extract the unique job ID from the end of the URL path
-                        job_id = href.split("/")[-1]
-
-                        jobs.append(
-                            {
-                                "id": job_id,
-                                "title": title,
-                                "url": full_url,
-                                "location": "India (Verify via link)",  # Workday DOM extraction is notoriously brittle for locations
-                                "raw_time": "",  # Time is often hidden behind clicks, so we fall back to "Current Time"
-                            }
-                        )
+                    jobs.append({
+                        "id": job_id,
+                        "title": title,
+                        "url": full_url,
+                        "location": location,
+                        "raw_time": calculated_date 
+                    })
         except Exception as e:
             print(f"Error scraping Workday for {target['name']}: {e}")
         finally:
             browser.close()
-
+            
     return jobs
-
 
 # --- CORE LOGIC ---
 def is_relevant(title, keywords):
