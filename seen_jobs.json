@@ -584,7 +584,10 @@
         "7685855",
         "7694115",
         "7695357",
-        "7553098"
+        "7553098",
+        "7657130",
+        "7550951",
+        "7697675"
     ],
     "Figma": [
         "5426468004",
@@ -1206,7 +1209,9 @@
         "8453711002",
         "8453725002",
         "8453718002",
-        "8453723002"
+        "8453723002",
+        "8457029002",
+        "8457089002"
     ],
     "Grab": [],
     "GoTo": [],
@@ -4306,6 +4311,7 @@
         "XMLNAME--CAN--Associ-saisonnier_R-2434241",
         "IND-SENIOR--SOFTWARE-ENGINEER_R-2411399",
         "XMLNAME--IND--SENIOR--SOFTWARE-ENGINEER_R-2427363",
-        "Director--Business-Strategy--Earnings-Governance--Independent-Contractors-_R-2440603"
+        "Director--Business-Strategy--Earnings-Governance--Independent-Contractors-_R-2440603",
+        "Director--Operations--Earnings-Defects--Independent-Contractors-_R-2440604-1"
     ]
 }
