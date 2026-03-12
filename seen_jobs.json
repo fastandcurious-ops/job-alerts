@@ -599,7 +599,11 @@
         "7645717",
         "7706824",
         "7704660",
-        "7712852"
+        "7712852",
+        "7334661",
+        "7411985",
+        "7651697",
+        "7624667"
     ],
     "Figma": [
         "5426468004",
@@ -2797,7 +2801,19 @@
         "8461226002",
         "8461239002",
         "8461241002",
-        "8401173002"
+        "8401173002",
+        "8461243002",
+        "8461245002",
+        "8461251002",
+        "8461258002",
+        "8461330002",
+        "8461328002",
+        "8461326002",
+        "8461325002",
+        "8461327002",
+        "8461324002",
+        "8457167002",
+        "8461321002"
     ],
     "Rubrik": [
         "7310036",
@@ -4519,6 +4535,8 @@
         "XMLNAME--USA--Senior-Manager--Data-Science--Perishable-First-Mile_R-2425751-1",
         "Full-Time-Staff-Pharmacist---Victoria-BC_R-2421990",
         "PRINCIPAL--TECHNICAL-PROGRAM-MANAGER_R-2388294",
-        "XMLNAME--CAN--Asset-Protection-Associate--Must-have-Security-License-_R-2444588"
+        "XMLNAME--CAN--Asset-Protection-Associate--Must-have-Security-License-_R-2444588",
+        "XMLNAME--USA--Member-Team-Lead_R-2444938",
+        "Cashier_R-2444923"
     ]
 }
