@@ -607,7 +607,8 @@
         "7542825",
         "7587174",
         "7715292",
-        "7714704"
+        "7714704",
+        "7716032"
     ],
     "Figma": [
         "5426468004",
@@ -1920,7 +1921,8 @@
         "7546654",
         "7436260",
         "7714490",
-        "7544451"
+        "7544451",
+        "7717198"
     ],
     "Tower Research Capital": [
         "6962672",
@@ -2848,7 +2850,8 @@
         "8455862002",
         "8459039002",
         "8459037002",
-        "8462016002"
+        "8462016002",
+        "8289850002"
     ],
     "Rubrik": [
         "7310036",
@@ -4194,7 +4197,9 @@
         "7619420",
         "7698048",
         "7701401",
-        "7647708"
+        "7647708",
+        "7657991",
+        "7657993"
     ],
     "Dropbox": [
         "7646405",
@@ -4599,6 +4604,12 @@
         "XMLNAME--CAN--Grocery-Associate_R-2445090",
         "XMLNAME--USA--Overnight-Stocking-Coach--Non-Complex_R-2437420-1",
         "XMLNAME--CAN--Consumables-Associate-Part-Time_R-2445491",
-        "XMLNAME--CAN--Staff-Pharmacist---Duncan_R-2445296"
+        "XMLNAME--CAN--Staff-Pharmacist---Duncan_R-2445296",
+        "XMLNAME--CAN--Grocery-Associate_R-2445332",
+        "XMLNAME--CAN--Grocery-Associate_R-2445336",
+        "XMLNAME--CAN--Overnight-Associate_R-2445314",
+        "XMLNAME--CAN--Overnight-Associate_R-2445315",
+        "XMLNAME--CAN--Overnight-Associate_R-2445316",
+        "XMLNAME--CAN--Overnight-Lead-Department-Manager_R-2445320"
     ]
 }
