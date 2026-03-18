@@ -865,7 +865,11 @@
         "3206484",
         "3206477",
         "3206903",
-        "3207388"
+        "3207388",
+        "3207556",
+        "3207554",
+        "3207555",
+        "3207557"
     ],
     "Checkout.com": [],
     "CRED": [],
@@ -2023,7 +2027,9 @@
         "7729271",
         "7729350",
         "7725256",
-        "7721281"
+        "7721281",
+        "7730723",
+        "7616290"
     ],
     "Tower Research Capital": [
         "6962672",
@@ -4233,7 +4239,8 @@
         "6618559",
         "7721224",
         "7698911",
-        "7726073"
+        "7726073",
+        "7721221"
     ],
     "DoorDash": [],
     "GitHub": [],
@@ -4799,7 +4806,8 @@
         "Manger-Software-Engineer--Python--Hadoop--_R-267511-1?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000",
         "Lead--Big-Data-Analytics---Engineering_R-271908-1?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000",
         "Principal-Software-Engineer---Java--Edge--Security-models--TLS-certificate_R-258652?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000",
-        "Senior-Accountant_R-273540?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000"
+        "Senior-Accountant_R-273540?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000",
+        "Lead-Database-Engineer_R-271247?locations=85a5bdf4e1831035984400a2fb698c94&locations=8eab563831bf10acbc722e4859721571&locations=8eab563831bf10acb97b7fba5feff76e&locations=28905a74db1b10019f5bb16c36030000"
     ],
     "Walmart Global Tech": [
         "XMLNAME--IND--Data-Scientist-III_R-2422992",
