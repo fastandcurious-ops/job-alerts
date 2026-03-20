@@ -1108,7 +1108,8 @@
         "7729184",
         "7732068",
         "7732011",
-        "6689229"
+        "6689229",
+        "7194526"
     ],
     "Upstox": [],
     "Brex": [
@@ -4994,7 +4995,12 @@
         "Associate-Managing-Consultant--Advisors---Consulting-Services--Strategy---Transformation_R-267091-3",
         "Lead-Software-Development-Engineer---API-Platform_R-265815",
         "Director--Project-Management_R-272413",
-        "Principal-DevOps-Engineer---Decision-Management-Platform_R-273402"
+        "Principal-DevOps-Engineer---Decision-Management-Platform_R-273402",
+        "Director--Information-Security-Engineering_R-273753",
+        "Senior-Information-Security-Engineer_R-273756-1",
+        "Senior-VMWare-NSX-Engineer_R-273176",
+        "Principal--Advisors---Consulting-Services--Marketing_R-268813",
+        "Senior--Enterprise-Operations-2_R-273663"
     ],
     "Walmart Global Tech": [
         "XMLNAME--IND--Data-Scientist-III_R-2422992",
@@ -5079,6 +5085,7 @@
         "XMLNAME--USA--Member-Team-Lead_R-2449732",
         "XMLNAME--CAN--OMNI-Customer-Fulfillment-Associate_R-2452796",
         "XMLNAME--USA--Freight-Flow-Associate_R-2452908",
-        "XMLNAME--IND--Software-Engineer-III_R-2435849"
+        "XMLNAME--IND--Software-Engineer-III_R-2435849",
+        "XMLNAME--USA--Freight-Flow-Associate_R-2451651"
     ]
 }
