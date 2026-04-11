@@ -12,11 +12,11 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 STATE_FILE = "seen_jobs.json"
 
 SWE_KEYWORDS = [
-    "software engineer",
-    "sde",
-    "developer",
-    "programmer",
-    "backend",
+    "business analyst",
+    "data analyst",
+    "data engineer",
+    "product analyst",
+    "data",
     "frontend",
     "fullstack",
     "full stack",
@@ -46,8 +46,8 @@ SWE_KEYWORDS = [
 ]
 
 EXCLUDED_KEYWORDS = [
-    "staff", 
-    "director", 
+    "data scientist", 
+    "data entry", 
     "principal", 
     "manager", 
     "vp", 
