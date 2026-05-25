@@ -42,6 +42,68 @@ KEYWORDS = [
 ]
 
 # ---------------------------------------------------------------------------
+# LOCATION FILTER
+# ---------------------------------------------------------------------------
+# Jobs must match at least one ALLOWED location term, OR be explicitly remote.
+# Set STRICT_LOCATION = False to get all remote-global jobs too (recommended).
+# Set STRICT_LOCATION = True to only get India-based + remote jobs.
+
+STRICT_LOCATION = True
+
+# Any job whose location contains one of these strings (case-insensitive) is ALLOWED
+ALLOWED_LOCATIONS = [
+    "india", "bangalore", "bengaluru", "mumbai", "delhi", "hyderabad",
+    "pune", "chennai", "kolkata", "gurugram", "noida", "remote",
+    "work from home", "wfh", "anywhere", "worldwide", "global",
+    "",   # empty location = assume remote/unspecified → allow
+]
+
+# Any job whose location contains one of these is BLOCKED (even if remote appears too)
+# e.g. "Remote - US Only" should be blocked
+BLOCKED_LOCATION_TERMS = [
+    "united states", "u.s.", "us only", "usa only",
+    "new york", "san francisco", "seattle", "austin", "chicago",
+    "london", "uk only", "united kingdom",
+    "germany", "berlin", "france", "paris",
+    "canada", "toronto", "vancouver",
+    "australia", "sydney",
+    "singapore",   # remove this if you're open to Singapore
+]
+
+
+def is_allowed_location(location: str) -> bool:
+    """
+    Returns True if the job location is acceptable.
+    Logic:
+      1. If location is empty/unknown → allow (assume remote/unspecified)
+      2. If location contains a BLOCKED term → reject, even if 'remote' also appears
+         (catches "Remote - US Only" style postings)
+      3. If STRICT_LOCATION is True → must match an ALLOWED term
+      4. If STRICT_LOCATION is False → allow everything not blocked
+    """
+    if not STRICT_LOCATION:
+        # Only block explicitly restricted locations
+        loc = location.lower()
+        return not any(b in loc for b in BLOCKED_LOCATION_TERMS)
+
+    loc = location.lower().strip()
+
+    # Empty = unspecified, treat as remote → allow
+    if not loc:
+        return True
+
+    # Block US/EU-only postings first
+    if any(b in loc for b in BLOCKED_LOCATION_TERMS):
+        # Last chance: if it's "Remote, Worldwide" or "Global Remote" allow it
+        if any(g in loc for g in ["worldwide", "global", "anywhere"]):
+            return True
+        return False
+
+    # Must match at least one allowed term
+    return any(a in loc for a in ALLOWED_LOCATIONS if a)  # skip empty string here
+
+
+# ---------------------------------------------------------------------------
 # COMPANIES — structured by ATS
 # ---------------------------------------------------------------------------
 
@@ -581,7 +643,7 @@ def main():
 
         for job in current_jobs:
             if job["id"] not in company_seen:
-                if is_relevant(job["title"]):
+                if is_relevant(job["title"]) and is_allowed_location(job.get("location", "")):
                     send_alert(name, job["title"], job["url"], job.get("location", ""))
                 new_memory.append(job["id"])
                 new_jobs_found = True
@@ -603,7 +665,7 @@ def main():
         new_ids  = seen_ids.copy()
         for job in check_amazon_jobs(query, country):
             if job["id"] not in seen_ids:
-                if is_relevant(job["title"]):
+                if is_relevant(job["title"]) and is_allowed_location(job["location"]):
                     send_alert("Amazon", job["title"], job["url"], job["location"])
                 new_ids.append(job["id"])
                 new_jobs_found = True
@@ -618,7 +680,7 @@ def main():
         new_ids  = seen_ids.copy()
         for job in check_linkedin(cfg["keywords"], cfg["location"], cfg.get("remote", "")):
             if job["id"] not in seen_ids:
-                if is_relevant(job["title"]):
+                if is_relevant(job["title"]) and is_allowed_location(job.get("location", "")):
                     send_alert(
                         "LinkedIn",
                         job["title"],
@@ -653,7 +715,7 @@ def main():
         new_ids  = seen_ids.copy()
         for job in check_wellfound(q):
             if job["id"] not in seen_ids:
-                if is_relevant(job["title"]):
+                if is_relevant(job["title"]) and is_allowed_location(job.get("location", "")):
                     send_alert(
                         "Wellfound",
                         job["title"],
