@@ -18,7 +18,7 @@ COMPANIES = [
 ]
 
 # Optional: Filter by keywords to avoid getting pinged for every single role
-KEYWORDS = ["engineer", "software", "developer", "backend", "fullstack"]
+KEYWORDS = ["data engineer", "data analyst", "business analyst", "product analyst", "blockchain developer", "blockchain analyst", "crypto analyst" ]
 
 # --- CORE LOGIC ---
 
